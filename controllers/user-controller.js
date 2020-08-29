@@ -51,11 +51,11 @@ const signUp = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     const { email, password } = req.body;
-    // console.log(email, password);
+    console.log(email, password);
     
     let existingUser, userWallet;
     try {
-        existingUser = await User.findOne({ email: email }, '-password');
+        existingUser = await User.findOne({ email: email });
         userWallet = await UserWallet.findOne({ email: email });
     } catch (error) {
         return next(error);

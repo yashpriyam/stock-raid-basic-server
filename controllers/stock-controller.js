@@ -16,7 +16,7 @@ const getStocks = async (req,res,next) => {
             return next(err);
         }
         res.write(`data: ${JSON.stringify({stocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
-    }, 1000);
+    }, 500);
 };
 
 const createStocks = async (req, res, next) => {

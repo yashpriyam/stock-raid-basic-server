@@ -20,7 +20,7 @@ const userAllStocks = async (req,res,next) => {
             return next(err);
         }
         
-    }, 1000)
+    }, 500)
     
 };
 

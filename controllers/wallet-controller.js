@@ -25,7 +25,7 @@ const getWalletByUserEmail = async (req, res, next) => {
       return next(error)
     } 
     res.write(`data: ${JSON.stringify({wallet: wallet.toObject({ getters: true})})}\n\n`);
-  }, 1000)
+  }, 500)
   // res.json({ wallet: wallet.toObject({ getters: true}) });
 };
 
