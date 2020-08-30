@@ -1,7 +1,14 @@
 const UserWallet = require('../db-models/wallet-models');
 
 const getWalletByUserEmail = async (req, res, next) => {
-  const userEmail = req.params.pid;
+  let userEmail;
+    if (req) {
+        if (req.hasOwnProperty(params)) {
+            userEmail = req.params.pid;
+        } else {
+            userEmail = req;
+        }
+    }
 
   const SSE_RES_HEADERS = {
     'Connection': 'keep-alive',
@@ -41,7 +48,7 @@ const updateUserWallet = async (req,res,next) => {
     return next(error);
   }
 
-  userWallet.walletBalance = walletBalance.toFixed(2);
+  userWallet.walletBalance = Number(walletBalance).toFixed(2);
 
   try{
     await userWallet.save();
@@ -49,7 +56,7 @@ const updateUserWallet = async (req,res,next) => {
     const error = new Error('Cannot use your wallet',500);
     return next(error);
   }
-  getWalletByUserEmail();
+  getWalletByUserEmail(userWallet.email);
   res.status(200).json({userWallet: userWallet.toObject({getters: true})})
 };
 

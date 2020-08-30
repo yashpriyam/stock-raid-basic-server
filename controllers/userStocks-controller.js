@@ -1,7 +1,15 @@
 const UserStockData = require('../db-models/userStocks-models');
 
 const userAllStocks = async (req,res,next) => {
-    const userEmail = req.params.pid
+    let userEmail;
+    if (req) {
+        if (req.params) {
+            userEmail = req.params.pid;
+        } else {
+            userEmail = req;
+        }
+    }
+    
     const SSE_RES_HEADERS = {
         'Connection': 'keep-alive',
         'Content-type': 'text/event-stream',
@@ -44,7 +52,7 @@ const newStockPurchase = async (req, res, next) => {
         const error = new Error('error',500);
         return next(error);
         }
-        userAllStocks();
+        userAllStocks(userHasSameStocks.email);
         res.status(200).json({user: userHasSameStocks.toObject({getters: true})})
     } else {
         const newUserStockData = new UserStockData({
@@ -83,7 +91,7 @@ const userStocksSell = async (req, res, next) => {
         const error = new Error('Cannot update',500);
         return next(error);
     }
-    userAllStocks();
+    userAllStocks(stockToUpdate.email);
     res.status(200).json({user: stockToUpdate.toObject({getters: true})})
 };
 

@@ -61,7 +61,11 @@ const updateStockPrice = async (req,res,next) => {
       const error = new Error('error', 500);
       return next(error);
     }
-  
+
+    stock.lastPrices.push({
+        unixTime: Math.round((new Date()).getTime() / 1000),
+        price: stock.pershareprice
+    })
     stock.pershareprice = pershareprice;
     stock.availablestocks = availablestocks;
   
