@@ -48,6 +48,7 @@ const newStockPurchase = async (req, res, next) => {
         const error = new Error('error',500);
         return next(error);
         }
+        userAllStocks();
         res.status(200).json({user: userHasSameStocks.toObject({getters: true})})
     } else {
         const newUserStockData = new UserStockData({
@@ -61,6 +62,7 @@ const newStockPurchase = async (req, res, next) => {
         } catch (error) {
             return next(error);
         }
+        userAllStocks();
         res.status(201).json({user: newUserStockData.toObject({ getters: true })});
     }
 };
@@ -74,24 +76,18 @@ const userStocksSell = async (req, res, next) => {
 
     try {
         stockToUpdate = await UserStockData.findById(stockId);
-        
-
-        // if (stockToUpdate.stockName === stockName) {
-            // stockToUpdate.numberOfStocks = Number(numberOfStocks);
-        // }
-        // res.status(200).json({user: stockToUpdate.toObject({getters: true})})
-        
     } catch (error) {
         throw new Error('Cannot access user\'s stock list', 500);
     }
-    console.log(stockToUpdate);
+    // console.log(stockToUpdate);
     stockToUpdate.numberOfStocks = numberOfStocks
     try{
         await stockToUpdate.save();
     } catch (err) {
-    const error = new Error('Cannot update',500);
+        const error = new Error('Cannot update',500);
         return next(error);
     }
+    userAllStocks();
     res.status(200).json({user: stockToUpdate.toObject({getters: true})})
 };
 
