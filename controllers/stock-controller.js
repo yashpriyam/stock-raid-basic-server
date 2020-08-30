@@ -8,7 +8,7 @@ const getStocks = async (req,res,next) => {
     }
     let stocks;
     res.writeHead(200, SSE_RES_HEADERS);
-    setInterval(async () => {
+    // setInterval(async () => {
         try {
             stocks = await Stocks.find({}, '-id');
         } catch (error) {
@@ -16,7 +16,7 @@ const getStocks = async (req,res,next) => {
             return next(err);
         }
         res.write(`data: ${JSON.stringify({stocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
-    }, 500);
+    // }, 500);
 };
 
 const createStocks = async (req, res, next) => {
@@ -45,6 +45,7 @@ const createStocks = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
+    getStocks();
     res.status(201).json({stock: newStock.toObject({ getters: true })});
 };
 
@@ -70,6 +71,7 @@ const updateStockPrice = async (req,res,next) => {
       const error = new Error('error in updating',500);
       return next(error);
     }
+    getStocks();
     res.status(200).json({stock: stock.toObject({getters: true})})
   };
 
