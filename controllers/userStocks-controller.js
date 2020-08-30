@@ -9,19 +9,15 @@ const userAllStocks = async (req,res,next) => {
     }
     let stocks;
     res.writeHead(200, SSE_RES_HEADERS);
-    setInterval(async () => {
-        try {
-            stocks = await UserStockData.find({ email: userEmail });
-            if (stocks) {
-                res.write(`data: ${JSON.stringify({userStocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
-            }
-        } catch (error) {
-            const err = new Error('fetching stocks failed', 500);
-            return next(err);
+    try {
+        stocks = await UserStockData.find({ email: userEmail });
+        if (stocks) {
+            res.write(`data: ${JSON.stringify({userStocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
         }
-        
-    }, 500)
-    
+    } catch (error) {
+        const err = new Error('fetching stocks failed', 500);
+        return next(err);
+    }
 };
 
 const newStockPurchase = async (req, res, next) => {
