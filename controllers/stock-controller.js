@@ -7,15 +7,16 @@ const getStocks = async (req,res,next) => {
         'Cache-control': 'no-cache',
     }
     let stocks;
+    console.log(res, 'i am logging params is not defined');
     res.writeHead(200, SSE_RES_HEADERS);
     // setInterval(async () => {
-        try {
-            stocks = await Stocks.find({}, '-id');
-        } catch (error) {
-            const err = new Error('fetching stocks failed', 500);
-            return next(err);
-        }
-        res.write(`data: ${JSON.stringify({stocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
+    try {
+        stocks = await Stocks.find({}, '-id');
+    } catch (error) {
+        const err = new Error('fetching stocks failed', 500);
+        return next(err);
+    }
+    res.write(`data: ${JSON.stringify({stocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
     // }, 500);
 };
 
@@ -75,7 +76,7 @@ const updateStockPrice = async (req,res,next) => {
       const error = new Error('error in updating',500);
       return next(error);
     }
-    getStocks();
+    console.log(getStocks());
     res.status(200).json({stock: stock.toObject({getters: true})})
   };
 
