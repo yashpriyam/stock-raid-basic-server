@@ -14,6 +14,7 @@ const getWalletByUserEmail = async (req, res, next) => {
     'Connection': 'keep-alive',
     'Content-type': 'text/event-stream',
     'Cache-control': 'no-cache',
+    'Origin': '*',
   }
 
   let wallet;
@@ -48,6 +49,10 @@ const updateUserWallet = async (req,res,next) => {
     return next(error);
   }
 
+  userWallet.lastBalances.push({
+    unixTime: Math.floor(new Date() / 1000),
+    balance: userWallet.walletBalance
+  })
   userWallet.walletBalance = Number(walletBalance).toFixed(2);
 
   try{

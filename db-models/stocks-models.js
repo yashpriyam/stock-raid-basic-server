@@ -7,7 +7,7 @@ const stockSchema = mongoose.model('stocks-data',{
     availablestocks: { type: Number, required: true, min: 0 },
     pershareprice: { type: Number, required: true, min: 0 },
     lastPrices: [{
-        unixTime: { type: Date },
+        unixTime: { type: Number },
         price: {type: Number}
     }]
 });
