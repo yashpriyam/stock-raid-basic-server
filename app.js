@@ -2,12 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const { userRoutes, stockRoutes, walletRoutes, userStocksRoutes } = require('./routes');
-
 const app = express();
-
 app.use(bodyParser.json());
-
 //Handling CORS errors, try to publish both the server and client on the same url
 app.use((req,res,next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,6 +13,7 @@ app.use((req,res,next) => {
   next();
 })
 
+const { userRoutes, stockRoutes, walletRoutes, userStocksRoutes } = require('./routes');
 app.use('/api/stocks', stockRoutes)
 app.use('/api/users', userRoutes);
 app.use('/api/wallet', walletRoutes);
@@ -27,13 +24,14 @@ app.use((req,res,next) => {
     throw error;
 })
 
-app.use((error, req, res, next) => {
-  if (res.headerSent) {
-    return next(error);
-  }
-  res.status(error.code || 500)
-  res.json({message: error.message || 'An unknown error occurred!'});
-});
+//not knowing the exact purpose
+// app.use((error, req, res, next) => {
+//   if (res.headerSent) {
+//     return next(error);
+//   }
+//   res.status(error.code || 500)
+//   res.json({message: error.message || 'An unknown error occurred!'});
+// });
 
 const uri = "mongodb+srv://yash_priyam_stock_raid:vprnruotzHHyjaE5@cluster0.k468m.mongodb.net/stockRaidDB?retryWrites=true&w=majority";
 mongoose

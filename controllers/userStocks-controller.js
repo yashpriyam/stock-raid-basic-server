@@ -1,15 +1,7 @@
 const UserStockData = require('../db-models/userStocks-models');
 
 const userAllStocks = async (req,res,next) => {
-    let userEmail;
-    if (req) {
-        if (req.params) {
-            userEmail = req.params.pid;
-        } else {
-            userEmail = req;
-        }
-    }
-    
+    const userEmail = req.params.pid
     const SSE_RES_HEADERS = {
         'Connection': 'keep-alive',
         'Content-type': 'text/event-stream',
@@ -17,15 +9,19 @@ const userAllStocks = async (req,res,next) => {
     }
     let stocks;
     res.writeHead(200, SSE_RES_HEADERS);
-    try {
-        stocks = await UserStockData.find({ email: userEmail });
-        if (stocks) {
-            res.write(`data: ${JSON.stringify({userStocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
+    setInterval(async () => {
+        try {
+            stocks = await UserStockData.find({ email: userEmail });
+            // if (stocks) {
+                
+            // }
+        } catch (error) {
+            const err = new Error('fetching stocks failed', 500);
+            return next(err);
         }
-    } catch (error) {
-        const err = new Error('fetching stocks failed', 500);
-        return next(err);
-    }
+        res.write(`data: ${JSON.stringify({userStocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
+    }, 5000)
+    
 };
 
 const newStockPurchase = async (req, res, next) => {
@@ -52,7 +48,7 @@ const newStockPurchase = async (req, res, next) => {
         const error = new Error('error',500);
         return next(error);
         }
-        userAllStocks(userHasSameStocks.email);
+        // userAllStocks();
         res.status(200).json({user: userHasSameStocks.toObject({getters: true})})
     } else {
         const newUserStockData = new UserStockData({
@@ -66,7 +62,7 @@ const newStockPurchase = async (req, res, next) => {
         } catch (error) {
             return next(error);
         }
-        userAllStocks();
+        // userAllStocks();
         res.status(201).json({user: newUserStockData.toObject({ getters: true })});
     }
 };
@@ -88,10 +84,10 @@ const userStocksSell = async (req, res, next) => {
     try{
         await stockToUpdate.save();
     } catch (err) {
-        const error = new Error('Cannot update',500);
+    const error = new Error('Cannot update',500);
         return next(error);
     }
-    userAllStocks(stockToUpdate.email);
+    
     res.status(200).json({user: stockToUpdate.toObject({getters: true})})
 };
 
