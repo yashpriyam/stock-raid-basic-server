@@ -3,7 +3,7 @@ const getUserStocksController = require("../controllers/userStocks-controller");
 
 const userStockRoutes = express.Router();
 
-userStockRoutes.get('/:pid', getUserStocksController.userAllStocks);
+userStockRoutes.get('/', getUserStocksController.userAllStocks);
 
 userStockRoutes.post('/', getUserStocksController.newStockPurchase);
 
