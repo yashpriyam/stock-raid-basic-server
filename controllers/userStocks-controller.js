@@ -1,7 +1,7 @@
 const UserStockData = require('../db-models/userStocks-models');
 
 const userAllStocks = async (req,res,next) => {
-    const userEmail = req.params.pid
+    // const userEmail = req.params.pid
     const SSE_RES_HEADERS = {
         'Connection': 'keep-alive',
         'Content-type': 'text/event-stream',
@@ -11,10 +11,7 @@ const userAllStocks = async (req,res,next) => {
     res.writeHead(200, SSE_RES_HEADERS);
     setInterval(async () => {
         try {
-            stocks = await UserStockData.find({ email: userEmail });
-            // if (stocks) {
-                
-            // }
+            stocks = await UserStockData.find({}, '-id');
         } catch (error) {
             const err = new Error('fetching stocks failed', 500);
             return next(err);
