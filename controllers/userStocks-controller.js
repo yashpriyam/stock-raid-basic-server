@@ -15,11 +15,11 @@ const userAllStocks = async (req,res,next) => {
             stocks = await UserStockData.find({}, '-id');
         } catch (error) {
             return res.status(400).json({message: 'fetching stocks failed, please try again'})
-            const err = new Error('fetching stocks failed', 500);
-            return next(err);
+            // const err = new Error('fetching stocks failed', 500);
+            // return next(err);
         }
         res.write(`data: ${JSON.stringify({userStocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
-    }, 5000)
+    }, 2000)
     
 };
 
