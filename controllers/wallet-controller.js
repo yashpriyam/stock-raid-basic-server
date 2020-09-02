@@ -15,8 +15,8 @@ const getWalletByUserEmail = async (req, res, next) => {
       wallet = await UserWallet.find({}, '-id')
     } catch(err) {
       return res.status(400).json({message: 'Cannot get user wallet, please try again'})
-      const error = new Error('Cannot get user\'s wallet', 500);
-      return next(error);
+      // const error = new Error('Cannot get user\'s wallet', 500);
+      // return next(error);
     }
     if (!wallet) {
       return res.status(400).json({message: 'User wallet not accessible, please try again'})
