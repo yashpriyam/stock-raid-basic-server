@@ -3,7 +3,7 @@ const getUserWalletController = require("../controllers/wallet-controller");
 
 const walletroutes = express.Router();
 
-walletroutes.get('/:pid', getUserWalletController.getWalletByUserEmail);
+walletroutes.get('/', getUserWalletController.getWalletByUserEmail);
 
 walletroutes.patch('/:pid', getUserWalletController.updateUserWallet);
 
