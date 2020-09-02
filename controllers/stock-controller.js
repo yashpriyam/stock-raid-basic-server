@@ -3,7 +3,7 @@ const Stocks = require('../db-models/stocks-models');
 const getStocks = async (req,res,next) => {
     const SSE_RES_HEADERS = {
         'Connection': 'keep-alive',
-        'Content-type': 'text/event-stream',
+        'Content-Type': 'text/event-stream',
         'Cache-control': 'no-cache',
     }
     let stocks;
@@ -13,8 +13,9 @@ const getStocks = async (req,res,next) => {
         try {
             stocks = await Stocks.find({}, '-id');
         } catch (error) {
-            const err = new Error('fetching stocks failed', 500);
-            return next(err);
+            return res.status(400).json({message: 'fetching stocks failed, please try again'})
+            // const err = new Error('fetching stocks failed', 500);
+            // return next(err);
         }
         res.write(`data: ${JSON.stringify({stocks: stocks.map(stock => stock.toObject({ getters: true }))})}\n\n`);
     }, 5000);
