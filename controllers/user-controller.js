@@ -26,7 +26,7 @@ const signUp = async (req, res, next) => {
     }
 
     if (existingUser) {
-        return res.status(422).json({message: 'Email already tken, try with different email id'})
+        return res.status(422).json({message: 'Email already taken, try with different email id'})
         // const error = new Error('Email already tken, try with different email id', 422)
         // return next(error);
     }
